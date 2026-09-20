@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rede ConstruMax — Orçamentos de materiais de construção sem custo</title>
+<meta name="description" content="A Rede ConstruMax conecta você a fornecedores parceiros de cimento, aço, elétrica, hidráulica, tintas, madeira e ferramentas. Peça seu orçamento gratuito em poucos minutos." />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="Rede ConstruMax — Orçamentos de materiais de construção sem custo" />
+<meta property="og:description" content="Compare fornecedores de materiais de construção da sua região e receba propostas sem custo." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="/img/hero.png" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2312161B'/%3E%3Cpath d='M15 70 L50 20 L85 70 Z' fill='none' stroke='%23E8590C' stroke-width='8'/%3E%3C/svg%3E" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@500;600;700;800;900&family=Big+Shoulders+Stencil:wght@700;800;900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+  :root{
+    --ink:#F3F0E7;
+    --ink-dim:#B9BFC9;
+    --bg:#101318;
+    --bg-alt:#161B22;
+    --surface:#1B2129;
+    --surface-2:#222933;
+    --line:rgba(243,240,231,0.10);
+    --line-strong:rgba(243,240,231,0.18);
+    --accent:#E8590C;
+    --accent-dim:#B84508;
+    --accent-2:#F2C14E;
+    --accent-ink:#181008;
+    --steel:#8A93A1;
+    --success:#4FA37A;
+    --danger:#E5636A;
+    --radius:16px;
+    --radius-sm:10px;
+    --font-display:'Big Shoulders', sans-serif;
+    --font-stencil:'Big Shoulders Stencil', sans-serif;
+    --font-body:'IBM Plex Sans', sans-serif;
+    --shadow-lg:0 30px 60px -20px rgba(0,0,0,0.55);
+    --shadow-sm:0 10px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;}
+  button{font-family:inherit;}
+  h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;line-height:1.05;margin:0;letter-spacing:0.01em;}
+  .container{max-width:1180px;margin:0 auto;padding:0 24px;}
+  section{position:relative;}
+
+  /* grain overlay */
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:998;opacity:0.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .kicker{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--font-stencil);font-weight:800;
+    letter-spacing:0.16em;text-transform:uppercase;
+    font-size:13px;color:var(--accent-2);
+  }
+  .kicker::before{content:"";width:22px;height:2px;background:var(--accent-2);display:inline-block;}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-family:var(--font-display);font-weight:700;letter-spacing:0.02em;
+    font-size:16px;padding:15px 28px;border-radius:999px;border:2px solid transparent;
+    cursor:pointer;transition:transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--accent);color:var(--accent-ink);box-shadow:var(--shadow-sm);}
+  .btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 30px -10px rgba(232,89,12,0.45);}
+  .btn-primary:active{transform:translateY(0);}
+  .btn-ghost{background:transparent;border-color:var(--line-strong);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--accent-2);color:var(--accent-2);}
+  .btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+
+  .stripe{
+    height:12px;
+    background:repeating-linear-gradient(-45deg, var(--accent) 0 16px, var(--accent-ink) 16px 32px);
+  }
+
+  /* ---------- Header ---------- */
+  header.site{
+    position:fixed;top:0;left:0;right:0;z-index:900;
+    background:rgba(16,19,24,0.75);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    transition:padding .25s ease, background .25s ease;
+  }
+  header.site .bar{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1180px;margin:0 auto;transition:padding .25s ease;}
+  header.site.scrolled .bar{padding:12px 24px;}
+  .logo{display:flex;align-items:center;gap:10px;font-family:var(--font-stencil);font-weight:800;font-size:22px;letter-spacing:0.02em;}
+  .logo svg{flex-shrink:0;}
+  .logo span{color:var(--accent-2);}
+  nav.main-nav{display:flex;align-items:center;gap:30px;}
+  nav.main-nav a{font-size:15px;font-weight:500;color:var(--ink-dim);transition:color .2s ease;position:relative;}
+  nav.main-nav a:hover{color:var(--ink);}
+  nav.main-nav a::after{content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;background:var(--accent);transition:width .2s ease;}
+  nav.main-nav a:hover::after{width:100%;}
+  .nav-actions{display:flex;align-items:center;gap:14px;}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+  .burger span{width:24px;height:2px;background:var(--ink);display:block;transition:transform .25s ease, opacity .25s ease;}
+  .mobile-panel{display:none;position:fixed;top:0;right:0;bottom:0;width:min(320px,80vw);background:var(--surface);z-index:950;padding:90px 28px 28px;flex-direction:column;gap:22px;transform:translateX(100%);transition:transform .3s ease;box-shadow:-20px 0 50px rgba(0,0,0,0.4);}
+  .mobile-panel.open{transform:translateX(0);}
+  .mobile-panel a{font-size:18px;font-weight:600;color:var(--ink);}
+  .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:940;opacity:0;transition:opacity .3s ease;}
+  .scrim.open{display:block;opacity:1;}
+
+  @media (max-width:900px){
+    nav.main-nav{display:none;}
+    .nav-actions .btn-primary-desktop{display:none;}
+    .burger{display:flex;}
+    .mobile-panel{display:flex;}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:170px 0 90px;
+    background:
+      radial-gradient(650px 420px at 82% 8%, rgba(232,89,12,0.18), transparent 60%),
+      repeating-linear-gradient(0deg, transparent 0 39px, var(--line) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, var(--line) 39px 40px),
+      var(--bg);
+  }
+  .hero .container{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;}
+  .hero h1{font-size:clamp(38px,5vw,60px);margin:18px 0 20px;}
+  .hero h1 em{font-style:normal;color:var(--accent);}
+  .hero p.lead{font-size:18px;color:var(--ink-dim);max-width:520px;margin-bottom:32px;}
+  .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:38px;}
+  .hero-chips{display:flex;gap:12px;flex-wrap:wrap;}
+  .chip{
+    display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-dim);
+    background:var(--surface);border:1px solid var(--line);padding:9px 14px;border-radius:999px;
+  }
+  .chip svg{width:15px;height:15px;color:var(--accent-2);flex-shrink:0;}
+
+  .hero-art{position:relative;}
+  .hero-art .frame{
+    position:relative;border-radius:22px;overflow:hidden;
+    clip-path:polygon(0 0,100% 0,100% 88%,88% 100%,0 100%);
+    box-shadow:var(--shadow-lg);
+    transform:rotate(1.2deg);
+  }
+  .hero-art .frame img{width:100%;height:420px;object-fit:cover;display:block;}
+  .hero-art .tag{
+    position:absolute;bottom:-18px;left:-18px;background:var(--accent-2);color:var(--accent-ink);
+    padding:14px 20px;border-radius:12px;font-family:var(--font-stencil);font-weight:800;
+    font-size:14px;letter-spacing:0.08em;text-transform:uppercase;box-shadow:var(--shadow-sm);
+    transform:rotate(-4deg);border:2px dashed var(--accent-ink);
+  }
+  @media (max-width:900px){
+    .hero{padding:140px 0 60px;}
+    .hero .container{grid-template-columns:1fr;}
+    .hero-art{order:-1;}
+    .hero-art .frame img{height:280px;}
+  }
+
+  /* ---------- Marquee ---------- */
+  .marquee-wrap{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;}
+  .marquee{display:flex;gap:40px;white-space:nowrap;animation:scroll-left 28s linear infinite;width:max-content;}
+  .marquee span{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--steel);letter-spacing:0.04em;text-transform:uppercase;display:flex;align-items:center;gap:12px;}
+  .marquee span::after{content:"◆";color:var(--accent);font-size:10px;}
+  @keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ---------- Section heads ---------- */
+  .section-head{max-width:640px;margin-bottom:48px;}
+  .section-head h2{font-size:clamp(30px,4vw,42px);margin-top:14px;}
+  .section-head p{color:var(--ink-dim);font-size:17px;margin-top:14px;}
+  .section-pad{padding:96px 0;}
+  .bg-alt{background:var(--bg-alt);}
+
+  /* ---------- Categories (accordion cards) ---------- */
+  .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .cat-card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px;cursor:pointer;transition:transform .25s ease, border-color .25s ease, background .25s ease;
+    display:grid;grid-template-rows:auto 0fr;transition:grid-template-rows .35s ease;
+  }
+  .cat-card.active{grid-template-rows:auto 1fr;background:var(--surface-2);border-color:var(--accent-dim);}
+  .cat-card:hover{transform:translateY(-4px);border-color:var(--line-strong);}
+  .cat-top{display:flex;flex-direction:column;gap:14px;}
+  .cat-icon{width:44px;height:44px;border-radius:12px;background:rgba(232,89,12,0.14);display:flex;align-items:center;justify-content:center;color:var(--accent);}
+  .cat-icon svg{width:24px;height:24px;}
+  .cat-top h3{font-size:19px;font-weight:700;}
+  .cat-top p{color:var(--ink-dim);font-size:14px;margin:0;}
+  .cat-more{overflow:hidden;}
+  .cat-more-inner{min-height:0;padding-top:16px;}
+  .cat-chips{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid var(--line);padding-top:14px;}
+  .cat-chips span{font-size:12px;background:var(--bg-alt);color:var(--ink-dim);padding:6px 10px;border-radius:999px;border:1px solid var(--line);}
+  .cat-toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--accent-2);margin-top:14px;letter-spacing:0.04em;text-transform:uppercase;}
+  .cat-toggle svg{width:12px;height:12px;transition:transform .3s ease;}
+  .cat-card.active .cat-toggle svg{transform:rotate(180deg);}
+  @media (max-width:1080px){.cat-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.cat-grid{grid-template-columns:1fr;}}
+
+  /* ---------- How it works ---------- */
+  .how-wrap{display:grid;grid-template-columns:0.95fr 1.05fr;gap:60px;align-items:center;}
+  .how-steps{display:flex;flex-direction:column;gap:0;}
+  .how-step{display:grid;grid-template-columns:56px 1fr;gap:20px;padding-bottom:38px;position:relative;}
+  .how-step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:var(--line-strong);}
+  .how-step:last-child::before{display:none;}
+  .how-step:last-child{padding-bottom:0;}
+  .how-num{
+    width:56px;height:56px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;font-family:var(--font-stencil);font-size:22px;font-weight:800;color:var(--accent-2);flex-shrink:0;
+  }
+  .how-step h3{font-size:21px;margin-bottom:8px;}
+  .how-step p{color:var(--ink-dim);margin:0;}
+  .how-art{border-radius:22px;overflow:hidden;box-shadow:var(--shadow-lg);}
+  .how-art img{width:100%;height:100%;object-fit:cover;}
+  @media (max-width:900px){.how-wrap{grid-template-columns:1fr;}.how-art{order:-1;height:260px;}}
+
+  /* ---------- Calculator ---------- */
+  .calc-box{
+    background:linear-gradient(160deg, var(--surface), var(--surface-2));
+    border:1px solid var(--line-strong);border-radius:22px;padding:44px;
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;
+    position:relative;overflow:hidden;
+  }
+  .calc-box::before{content:"";position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle, rgba(242,193,78,0.16), transparent 70%);}
+  .calc-form label{display:block;font-size:13px;font-weight:600;color:var(--ink-dim);margin-bottom:6px;margin-top:16px;}
+  .calc-form label:first-child{margin-top:0;}
+  .calc-form input, .calc-form select{
+    width:100%;background:var(--bg-alt);border:1px solid var(--line-strong);color:var(--ink);
+    padding:12px 14px;border-radius:var(--radius-sm);font-size:15px;font-family:inherit;
+  }
+  .calc-form input:focus, .calc-form select:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .calc-result{display:flex;flex-direction:column;justify-content:center;gap:18px;}
+  .calc-result .placeholder{color:var(--steel);font-size:14px;}
+  .calc-stat{background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 20px;display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .calc-stat .num{font-family:var(--font-stencil);font-size:34px;color:var(--accent-2);font-weight:800;}
+  .calc-stat .label{font-size:13px;color:var(--ink-dim);text-align:right;}
+  .calc-note{font-size:12px;color:var(--steel);line-height:1.5;}
+  @media (max-width:820px){.calc-box{grid-template-columns:1fr;padding:28px;}}
+
+  /* ---------- Benefits zig-zag ---------- */
+  .benefit-list{display:flex;flex-direction:column;gap:2px;}
+  .benefit-row{
+    display:grid;grid-template-columns:120px 1fr;align-items:center;gap:30px;
+    padding:34px 0;border-bottom:1px solid var(--line);
+  }
+  .benefit-row:nth-child(even){grid-template-columns:1fr 120px;}
+  .benefit-row:nth-child(even) .benefit-num{order:2;}
+  .benefit-num{font-family:var(--font-stencil);font-size:64px;color:transparent;-webkit-text-stroke:1.5px var(--line-strong);font-weight:800;text-align:center;}
+  .benefit-row:hover .benefit-num{-webkit-text-stroke:1.5px var(--accent);}
+  .benefit-text h3{font-size:22px;margin-bottom:8px;}
+  .benefit-text p{color:var(--ink-dim);margin:0;max-width:560px;}
+  @media (max-width:700px){
+    .benefit-row, .benefit-row:nth-child(even){grid-template-columns:70px 1fr;}
+    .benefit-num{font-size:40px;}
+  }
+
+  /* ---------- Testimonials ---------- */
+  .testi-wrap{position:relative;max-width:760px;margin:0 auto;}
+  .testi-track{overflow:hidden;border-radius:22px;}
+  .testi-slides{display:flex;transition:transform .5s cubic-bezier(.65,0,.35,1);}
+  .testi-slide{min-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:44px;text-align:center;}
+  .testi-quote{font-size:20px;line-height:1.55;color:var(--ink);margin-bottom:26px;}
+  .testi-quote::before{content:"“";color:var(--accent-2);}
+  .testi-quote::after{content:"”";color:var(--accent-2);}
+  .testi-author{font-family:var(--font-display);font-weight:700;font-size:15px;color:var(--accent-2);}
+  .testi-role{font-size:13px;color:var(--steel);margin-top:2px;}
+  .testi-controls{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:26px;}
+  .testi-arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s ease, color .2s ease;}
+  .testi-arrow:hover{border-color:var(--accent);color:var(--accent-2);}
+  .testi-dots{display:flex;gap:8px;}
+  .testi-dots button{width:9px;height:9px;border-radius:50%;background:var(--line-strong);border:none;cursor:pointer;padding:0;transition:background .2s ease, transform .2s ease;}
+  .testi-dots button.active{background:var(--accent);transform:scale(1.25);}
+
+  /* ---------- Lead form ---------- */
+  .form-wrap{display:grid;grid-template-columns:0.85fr 1.15fr;gap:50px;}
+  .form-side h2{font-size:clamp(28px,3.6vw,38px);margin-top:14px;}
+  .form-side p{color:var(--ink-dim);margin-top:14px;}
+  .form-side .guarantee{display:flex;gap:12px;margin-top:26px;align-items:flex-start;}
+  .form-side .guarantee svg{width:20px;height:20px;color:var(--success);flex-shrink:0;margin-top:2px;}
+  .form-side .guarantee p{margin:0;font-size:14px;}
+  .lead-card{background:var(--surface);border:1px solid var(--line-strong);border-radius:22px;padding:38px;box-shadow:var(--shadow-lg);position:relative;}
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink-dim);margin-bottom:6px;}
+  .field input, .field select, .field textarea{
+    width:100%;background:var(--bg-alt);border:1px solid var(--line-strong);color:var(--ink);
+    padding:13px 14px;border-radius:var(--radius-sm);font-size:15px;font-family:inherit;resize:vertical;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-dim);margin:18px 0 22px;}
+  .consent input{margin-top:3px;accent-color:var(--accent);}
+  .consent a{color:var(--accent-2);text-decoration:underline;}
+  .hp-field{position:absolute;left:-9999px;top:-9999px;}
+  .lead-card .btn-primary{width:100%;}
+  .lead-status{display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;gap:14px;padding:30px 10px;}
+  .lead-status svg{width:52px;height:52px;color:var(--success);}
+  .lead-status.error svg{color:var(--danger);}
+  .lead-status h3{font-size:20px;}
+  .lead-status p{color:var(--ink-dim);margin:0;max-width:340px;}
+  .spinner{width:18px;height:18px;border-radius:50%;border:2px solid rgba(24,16,8,0.35);border-top-color:var(--accent-ink);animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @media (max-width:900px){.form-wrap{grid-template-columns:1fr;}.field-row{grid-template-columns:1fr;}}
+
+  /* ---------- FAQ Accordion ---------- */
+  .faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
+  .faq-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);display:grid;grid-template-rows:auto 0fr;transition:grid-template-rows .35s ease, border-color .25s ease;}
+  .faq-item.active{grid-template-rows:auto 1fr;border-color:var(--accent-dim);}
+  .faq-q{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 22px;cursor:pointer;background:none;border:none;color:var(--ink);text-align:left;width:100%;font-size:16px;font-weight:600;font-family:inherit;}
+  .faq-q .plus{width:26px;height:26px;border-radius:50%;border:1px solid var(--line-strong);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .3s ease, border-color .3s ease;}
+  .faq-q .plus::before, .faq-q .plus::after{content:"";position:absolute;background:var(--ink-dim);transition:transform .3s ease, background .3s ease;}
+  .faq-q .plus::before{width:10px;height:1.5px;}
+  .faq-q .plus::after{width:1.5px;height:10px;}
+  .faq-item.active .faq-q .plus{transform:rotate(135deg);border-color:var(--accent);}
+  .faq-item.active .faq-q .plus::before, .faq-item.active .faq-q .plus::after{background:var(--accent-2);}
+  .faq-a{overflow:hidden;}
+  .faq-a-inner{padding:0 22px 22px;color:var(--ink-dim);min-height:0;}
+
+  /* ---------- Footer ---------- */
+  footer.site{background:var(--bg-alt);border-top:1px solid var(--line);padding:70px 0 30px;}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;padding-bottom:44px;border-bottom:1px solid var(--line);}
+  .foot-brand p{color:var(--ink-dim);font-size:14px;margin-top:14px;max-width:280px;}
+  .foot-col h4{font-family:var(--font-display);font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:var(--steel);margin-bottom:16px;}
+  .foot-col ul{display:flex;flex-direction:column;gap:11px;}
+  .foot-col a{font-size:14px;color:var(--ink-dim);transition:color .2s ease;}
+  .foot-col a:hover{color:var(--accent-2);}
+  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:26px;font-size:12.5px;color:var(--steel);}
+  @media (max-width:820px){.foot-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:520px){.foot-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Cookie banner ---------- */
+  .cookie-banner{
+    position:fixed;left:20px;right:20px;bottom:20px;max-width:640px;margin:0 auto;
+    background:var(--surface);border:1px solid var(--line-strong);border-radius:18px;padding:22px 26px;
+    box-shadow:var(--shadow-lg);z-index:970;display:flex;flex-direction:column;gap:14px;
+    transform:translateY(140%);opacity:0;transition:transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
+  }
+  .cookie-banner.visible{transform:translateY(0);opacity:1;}
+  .cookie-banner p{margin:0;font-size:13.5px;color:var(--ink-dim);}
+  .cookie-banner a{color:var(--accent-2);text-decoration:underline;}
+  .cookie-actions{display:flex;gap:10px;flex-wrap:wrap;}
+  .cookie-actions .btn{padding:10px 18px;font-size:13px;}
+
+  /* ---------- Back to top ---------- */
+  .back-top{
+    position:fixed;right:22px;bottom:22px;width:48px;height:48px;border-radius:50%;
+    background:var(--accent);color:var(--accent-ink);border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);
+    opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s ease, transform .3s ease;z-index:850;
+  }
+  .back-top.visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+
+  /* ---------- Reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="site" id="siteHeader">
+  <div class="bar">
+    <a href="#top" class="logo">
+      <svg width="30" height="30" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M15 78 L50 22 L85 78 Z" fill="none" stroke="#E8590C" stroke-width="9"/></svg>
+      Rede<span>ConstruMax</span>
+    </a>
+    <nav class="main-nav">
+      <a href="#categorias">Categorias</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#vantagens">Vantagens</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#faq">Perguntas</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="#orcamento" class="btn btn-primary btn-primary-desktop">Peça seu orçamento</a>
+      <button class="burger" id="burgerBtn" aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+<nav class="mobile-panel" id="mobilePanel">
+  <a href="#categorias">Categorias</a>
+  <a href="#como-funciona">Como funciona</a>
+  <a href="#vantagens">Vantagens</a>
+  <a href="#depoimentos">Depoimentos</a>
+  <a href="#faq">Perguntas</a>
+  <a href="#orcamento" class="btn btn-primary" style="margin-top:10px;">Peça seu orçamento</a>
+</nav>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-copy">
+        <span class="kicker">Rede nacional de materiais</span>
+        <h1>Peça, compare e feche o <em>orçamento certo</em> pra sua obra</h1>
+        <p class="lead">A Rede ConstruMax reúne fornecedores parceiros de cimento, aço, elétrica, hidráulica, tintas, madeira e ferramentas. Você descreve o que precisa uma única vez — a rede cuida do resto.</p>
+        <div class="hero-ctas">
+          <a href="#orcamento" class="btn btn-primary">Solicitar orçamento gratuito</a>
+          <a href="#como-funciona" class="btn btn-ghost">Ver como funciona</a>
+        </div>
+        <div class="hero-chips">
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>R$ 0 para solicitar</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>8 categorias de materiais</span>
+          <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Cobertura em todo o Brasil</span>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="frame">
+          <img src="/.netlify/images?url=/img/hero.png&amp;w=900&amp;fm=webp&amp;q=80" width="900" height="500" alt="Depósito de materiais de construção organizado, com cimento, ferro e madeira" loading="eager" />
+        </div>
+        <div class="tag">Rede em expansão</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-wrap">
+    <div class="marquee" id="marquee">
+      <span>Cimento</span><span>Argamassa</span><span>Aço</span><span>Ferro</span><span>Elétrica</span><span>Hidráulica</span><span>Tintas</span><span>Madeiras</span><span>Ferramentas</span><span>Louças</span><span>Metais</span>
+      <span>Cimento</span><span>Argamassa</span><span>Aço</span><span>Ferro</span><span>Elétrica</span><span>Hidráulica</span><span>Tintas</span><span>Madeiras</span><span>Ferramentas</span><span>Louças</span><span>Metais</span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section-pad" id="categorias">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">O que dá pra pedir</span>
+        <h2>Categorias atendidas pela rede</h2>
+        <p>Clique em qualquer categoria para ver exemplos de materiais. O formulário de orçamento aceita pedidos combinados de mais de uma categoria.</p>
+      </div>
+      <div class="cat-grid" id="catGrid">
+        <!-- cards injected by JS-friendly static markup below -->
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-pad bg-alt" id="como-funciona">
+    <div class="container">
+      <div class="how-wrap">
+        <div>
+          <span class="kicker reveal">Do pedido à proposta</span>
+          <h2 class="reveal" style="font-size:clamp(30px,4vw,42px);margin:14px 0 34px;">Como funciona</h2>
+          <div class="how-steps">
+            <div class="how-step reveal">
+              <div class="how-num">01</div>
+              <div><h3>Descreva sua obra</h3><p>Conte o tipo de material, a quantidade estimada e a cidade onde a obra está acontecendo.</p></div>
+            </div>
+            <div class="how-step reveal">
+              <div class="how-num">02</div>
+              <div><h3>A rede recebe seu pedido</h3><p>Fornecedores parceiros da sua região são notificados e avaliam o que você precisa.</p></div>
+            </div>
+            <div class="how-step reveal">
+              <div class="how-num">03</div>
+              <div><h3>Compare e decida com calma</h3><p>Você recebe as propostas e escolhe quem faz mais sentido — sem pressão e sem custo.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="how-art reveal">
+          <img src="/.netlify/images?url=/img/howitworks.png&amp;w=800&amp;fm=webp&amp;q=80" width="800" height="600" alt="Fornecedor entregando um orçamento impresso para um cliente em uma loja de materiais" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="section-pad">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Demonstração rápida</span>
+        <h2>Calculadora de tijolo e cimento</h2>
+        <p>Um jeito prático de chegar numa estimativa antes de pedir o orçamento oficial. Informe a largura e a altura da parede.</p>
+      </div>
+      <div class="calc-box reveal">
+        <div class="calc-form">
+          <label for="calcLargura">Largura da parede (metros)</label>
+          <input type="number" id="calcLargura" min="0" step="0.1" placeholder="Ex: 5,5" />
+          <div class="calc-row">
+            <div>
+              <label for="calcAltura">Altura da parede (metros)</label>
+              <input type="number" id="calcAltura" min="0" step="0.1" placeholder="Ex: 2,8" />
+            </div>
+            <div>
+              <label for="calcTijolo">Tipo de tijolo</label>
+              <select id="calcTijolo">
+                <option value="62">Tijolo comum (9x19x19)</option>
+                <option value="33">Tijolo 6 furos (9x14x24)</option>
+                <option value="26">Tijolo 8 furos (9x19x29)</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="calcBtn" style="margin-top:22px;width:100%;">Calcular estimativa</button>
+        </div>
+        <div class="calc-result" id="calcResult">
+          <p class="placeholder">Preencha os campos ao lado para ver a estimativa de tijolos e sacos de cimento (50kg) para essa parede.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section-pad bg-alt" id="vantagens">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Por que usar a rede</span>
+        <h2>Vantagens de pedir por aqui</h2>
+      </div>
+      <div class="benefit-list">
+        <div class="benefit-row reveal">
+          <div class="benefit-num">01</div>
+          <div class="benefit-text"><h3>Solicitação sem custo</h3><p>Descrever sua necessidade e comparar propostas não tem nenhuma taxa para quem está construindo.</p></div>
+        </div>
+        <div class="benefit-row reveal">
+          <div class="benefit-num">02</div>
+          <div class="benefit-text"><h3>Fornecedores avaliados</h3><p>Cada parceiro da rede é avaliado pelos próprios clientes depois de cada atendimento.</p></div>
+        </div>
+        <div class="benefit-row reveal">
+          <div class="benefit-num">03</div>
+          <div class="benefit-text"><h3>Do pedido à entrega, online</h3><p>Fale com o fornecedor, tire dúvidas e combine a entrega sem precisar sair de casa.</p></div>
+        </div>
+        <div class="benefit-row reveal">
+          <div class="benefit-num">04</div>
+          <div class="benefit-text"><h3>Presença em todo o país</h3><p>A rede aceita solicitações de qualquer cidade e direciona para o fornecedor mais próximo disponível.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section-pad" id="depoimentos">
+    <div class="container">
+      <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+        <span class="kicker" style="justify-content:center;">Quem já pediu</span>
+        <h2>Depoimentos</h2>
+      </div>
+      <div class="testi-wrap reveal">
+        <div class="testi-track">
+          <div class="testi-slides" id="testiSlides">
+            <div class="testi-slide">
+              <p class="testi-quote">Pedi cotação de cimento e vergalhão numa sexta de manhã e já tinha três respostas até o almoço. Fechei com o fornecedor que entregava mais rápido.</p>
+              <div class="testi-author">Marcos Vinícius Andrade</div>
+              <div class="testi-role">Sorocaba, SP</div>
+            </div>
+            <div class="testi-slide">
+              <p class="testi-quote">Comparei preço de tinta e massa corrida sem precisar rodar loja por loja. Economizei uma tarde inteira de trabalho.</p>
+              <div class="testi-author">Talita Nogueira Ramos</div>
+              <div class="testi-role">Uberlândia, MG</div>
+            </div>
+            <div class="testi-slide">
+              <p class="testi-quote">Achei estranho ser de graça, mas só recebi contato dos fornecedores mesmo — nenhuma cobrança escondida no meio do caminho.</p>
+              <div class="testi-author">Edvaldo Ribeiro Costa</div>
+              <div class="testi-role">Feira de Santana, BA</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-controls">
+          <button class="testi-arrow" id="testiPrev" aria-label="Depoimento anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <div class="testi-dots" id="testiDots"></div>
+          <button class="testi-arrow" id="testiNext" aria-label="Próximo depoimento"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LEAD FORM -->
+  <section class="section-pad bg-alt" id="orcamento">
+    <div class="container">
+      <div class="form-wrap">
+        <div class="form-side reveal">
+          <span class="kicker">Última etapa</span>
+          <h2>Solicite seu orçamento</h2>
+          <p>Preencha em menos de um minuto. A rede direciona sua solicitação para fornecedores parceiros da sua região, sem custo para você.</p>
+          <div class="guarantee">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+            <p>Seus dados são usados apenas para direcionar o pedido aos fornecedores relevantes, conforme a nossa <a href="politica-de-privacidade.html" style="color:var(--accent-2);text-decoration:underline;">Política de Privacidade</a>.</p>
+          </div>
+        </div>
+        <div class="lead-card reveal">
+          <form name="orcamento" id="leadForm" method="POST" data-netlify="true" netlify-honeypot="empresa-site">
+            <input type="hidden" name="form-name" value="orcamento" />
+            <p class="hp-field"><label>Não preencha este campo: <input name="empresa-site" /></label></p>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="fName">Nome completo</label>
+                <input type="text" id="fName" name="nome" required />
+              </div>
+              <div class="field">
+                <label for="fPhone">WhatsApp ou telefone</label>
+                <input type="tel" id="fPhone" name="telefone" required />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="fEmail">E-mail</label>
+                <input type="email" id="fEmail" name="email" required />
+              </div>
+              <div class="field">
+                <label for="fCity">Cidade / UF</label>
+                <input type="text" id="fCity" name="cidade" placeholder="Ex: Campinas / SP" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="fCategory">Categoria de material</label>
+              <select id="fCategory" name="categoria" required>
+                <option value="">Selecione</option>
+                <option>Cimento e Argamassa</option>
+                <option>Ferro e Aço</option>
+                <option>Elétrica</option>
+                <option>Hidráulica</option>
+                <option>Tintas e Acabamento</option>
+                <option>Madeiras</option>
+                <option>Ferramentas</option>
+                <option>Louças e Metais</option>
+                <option>Outro / mais de uma categoria</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="fDetails">Detalhes do que você precisa</label>
+              <textarea id="fDetails" name="mensagem" rows="3" placeholder="Ex: preciso de 40 sacos de cimento CP II e 500 tijolos de 6 furos"></textarea>
+            </div>
+            <label class="consent">
+              <input type="checkbox" required />
+              <span>Li e concordo com os <a href="termos-de-servico.html">Termos de Serviço</a> e a <a href="politica-de-privacidade.html">Política de Privacidade</a>.</span>
+            </label>
+            <button type="submit" class="btn btn-primary" id="leadSubmit">Enviar solicitação</button>
+          </form>
+          <div class="lead-status" id="leadSuccess" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
+            <h3>Pedido recebido</h3>
+            <p>A rede vai direcionar sua solicitação para fornecedores da sua região. O contato costuma vir por telefone ou e-mail.</p>
+          </div>
+          <div class="lead-status error" id="leadError" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/></svg>
+            <h3>Não conseguimos enviar</h3>
+            <p>Tente novamente em alguns instantes ou escreva para contato@construmax.net.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section-pad" id="faq">
+    <div class="container">
+      <div class="section-head reveal" style="margin-left:auto;margin-right:auto;text-align:center;">
+        <span class="kicker" style="justify-content:center;">Tire suas dúvidas</span>
+        <h2>Perguntas frequentes</h2>
+      </div>
+      <div class="faq-list" id="faqList">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">A Rede ConstruMax vende materiais diretamente?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Não. A rede funciona como uma ponte entre quem está construindo e fornecedores parceiros — a venda e a entrega são combinadas diretamente com o fornecedor escolhido.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Quanto custa solicitar um orçamento?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Nada. Solicitar e comparar propostas é gratuito para quem está construindo. Os fornecedores é que participam da rede como parceiros.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Em quanto tempo recebo uma resposta?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Depende da disponibilidade dos fornecedores da sua região, mas a maioria das solicitações recebe o primeiro contato ainda no mesmo dia útil.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Meus dados estão seguros?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Sim. Seus dados são usados apenas para direcionar sua solicitação aos fornecedores relevantes, conforme descrito na nossa <a href="politica-de-privacidade.html" style="color:var(--accent-2);text-decoration:underline;">Política de Privacidade</a>.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">A rede atende a minha cidade?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">A rede recebe solicitações de qualquer cidade do país. A quantidade de fornecedores disponíveis pode variar de acordo com a região.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Como paro de receber contato dos fornecedores?<span class="plus"></span></button>
+          <div class="faq-a"><div class="faq-a-inner">Basta responder diretamente ao fornecedor que te contatou informando que não tem mais interesse, ou enviar um e-mail para contato@construmax.net solicitando a exclusão dos seus dados.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="logo" style="font-size:20px;">
+          <svg width="26" height="26" viewBox="0 0 100 100"><path d="M15 78 L50 22 L85 78 Z" fill="none" stroke="#E8590C" stroke-width="9"/></svg>
+          Rede<span>ConstruMax</span>
+        </a>
+        <p>Plataforma de intermediação entre consumidores e fornecedores parceiros de materiais de construção. Não realizamos venda direta de materiais.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Navegue</h4>
+        <ul>
+          <li><a href="#categorias">Categorias</a></li>
+          <li><a href="#como-funciona">Como funciona</a></li>
+          <li><a href="#vantagens">Vantagens</a></li>
+          <li><a href="#orcamento">Peça um orçamento</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="termos-de-uso.html">Termos de Uso</a></li>
+          <li><a href="termos-de-servico.html">Termos de Serviço</a></li>
+          <li><a href="politica-de-cookies.html">Política de Cookies</a></li>
+          <li><a href="politica-de-privacidade.html">Política de Privacidade</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="mailto:contato@construmax.net">contato@construmax.net</a></li>
+          <li style="color:var(--ink-dim);">Atendimento 100% online</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Rede ConstruMax. Todos os direitos reservados.</span>
+      <span>Plataforma de intermediação — não comercializamos materiais diretamente.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner" id="cookieBanner">
+  <p>Usamos cookies essenciais para o funcionamento do site e, com o seu consentimento, cookies de mensuração de campanhas (como o Google Ads) para entender o que funciona. Veja a nossa <a href="politica-de-cookies.html">Política de Cookies</a>.</p>
+  <div class="cookie-actions">
+    <button class="btn btn-primary" id="cookieAcceptAll">Aceitar todos</button>
+    <button class="btn btn-ghost" id="cookieEssentialOnly">Somente essenciais</button>
+  </div>
+</div>
+
+<button class="back-top" id="backTop" aria-label="Voltar ao topo">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Data: categories ---------- */
+  var categories = [
+    { icon:'<path d="M4 20h16M6 20V10l6-4 6 4v10M9 20v-6h6v6"/>', title:"Cimento & Argamassa", desc:"Cimento, argamassa colante e reboco pronto para qualquer etapa da obra.", items:["Cimento CP II","Cimento CP V","Argamassa colante","Reboco pronto","Cal hidratada"] },
+    { icon:'<path d="M4 12h16M4 6h16M4 18h16"/>', title:"Ferro & Aço", desc:"Vergalhões, telas soldadas e perfis para fundação, laje e estrutura.", items:["Vergalhão CA-50","Tela soldada","Arame recozido","Perfil metálico","Treliça"] },
+    { icon:'<path d="M13 2L3 14h7l-1 8 11-14h-7z"/>', title:"Elétrica", desc:"Fios, cabos, disjuntores e quadros com as normas da sua região.", items:["Fio flexível","Cabo PP","Disjuntor","Quadro de distribuição","Eletroduto"] },
+    { icon:'<path d="M12 2v6M8 8h8l2 12H6L8 8z"/>', title:"Hidráulica", desc:"Tubos, conexões e registros para instalações novas ou reforma.", items:["Tubo PVC","Conexões soldáveis","Caixa d'água","Registro de gaveta","Rufo"] },
+    { icon:'<path d="M4 4h16v4H4zM4 12h10v8H4z"/>', title:"Tintas & Acabamento", desc:"Tintas acrílicas, texturas e massa corrida de fornecedores locais.", items:["Tinta acrílica","Textura acrílica","Massa corrida","Verniz","Selador"] },
+    { icon:'<path d="M3 21h18M6 21V9l6-5 6 5v12"/>', title:"Madeiras", desc:"Vigas, ripas, compensados e madeira de lei para telhado e acabamento.", items:["Viga de eucalipto","Ripas","Compensado naval","Madeira de lei","Caibro"] },
+    { icon:'<path d="M14.7 6.3a1 1 0 010 1.4l-6 6a1 1 0 01-1.4 0l-2-2a1 1 0 011.4-1.4l1.3 1.3 5.3-5.3a1 1 0 011.4 0zM6 16l-3 5"/>', title:"Ferramentas", desc:"Furadeiras, betoneiras e andaimes para locação ou compra.", items:["Furadeira de impacto","Betoneira","Andaime tubular","Nível a laser","Serra mármore"] },
+    { icon:'<path d="M7 4h10v6a5 5 0 01-10 0V4zM9 20h6M12 15v5"/>', title:"Louças & Metais", desc:"Vasos, cubas e metais sanitários para o acabamento final.", items:["Vaso sanitário","Cuba de embutir","Torneira monocomando","Chuveiro elétrico","Sifão"] }
+  ];
+
+  var catGrid = document.getElementById('catGrid');
+  categories.forEach(function(cat){
+    var card = document.createElement('div');
+    card.className = 'cat-card';
+    card.setAttribute('role','button');
+    card.setAttribute('tabindex','0');
+    card.setAttribute('aria-expanded','false');
+    card.innerHTML =
+      '<div class="cat-top">' +
+        '<div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + cat.icon + '</svg></div>' +
+        '<h3>' + cat.title + '</h3>' +
+        '<p>' + cat.desc + '</p>' +
+        '<span class="cat-toggle">Ver materiais <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>' +
+      '</div>' +
+      '<div class="cat-more"><div class="cat-more-inner"><div class="cat-chips">' +
+        cat.items.map(function(i){ return '<span>' + i + '</span>'; }).join('') +
+      '</div></div></div>';
+
+    function toggle(){
+      var active = card.classList.toggle('active');
+      card.setAttribute('aria-expanded', active ? 'true' : 'false');
+    }
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+    catGrid.appendChild(card);
+  });
+
+  /* ---------- Header scroll state ---------- */
+  var header = document.getElementById('siteHeader');
+  var backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    backTop.classList.toggle('visible', y > 600);
+  });
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- Mobile menu ---------- */
+  var burger = document.getElementById('burgerBtn');
+  var panel = document.getElementById('mobilePanel');
+  var scrim = document.getElementById('scrim');
+  function closeMenu(){
+    panel.classList.remove('open');
+    scrim.classList.remove('open');
+    burger.setAttribute('aria-expanded','false');
+  }
+  burger.addEventListener('click', function(){
+    var open = panel.classList.toggle('open');
+    scrim.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  scrim.addEventListener('click', closeMenu);
+  panel.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', closeMenu); });
+
+  /* ---------- Scroll reveal ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.15 });
+  revealEls.forEach(function(el){ io.observe(el); });
+
+  /* ---------- Calculator ---------- */
+  var calcBtn = document.getElementById('calcBtn');
+  var calcResult = document.getElementById('calcResult');
+  calcBtn.addEventListener('click', function(){
+    var largura = parseFloat(document.getElementById('calcLargura').value.replace(',', '.'));
+    var altura = parseFloat(document.getElementById('calcAltura').value.replace(',', '.'));
+    var consumo = parseFloat(document.getElementById('calcTijolo').value);
+    if(!largura || !altura || largura <= 0 || altura <= 0){
+      calcResult.innerHTML = '<p class="placeholder" style="color:var(--danger);">Informe largura e altura maiores que zero para calcular.</p>';
+      return;
+    }
+    var area = largura * altura;
+    var tijolos = Math.ceil(area * consumo);
+    var cimentoKg = area * 5;
+    var sacos = Math.ceil(cimentoKg / 50);
+    calcResult.innerHTML =
+      '<div class="calc-stat"><span class="num" data-count="' + tijolos + '">0</span><span class="label">tijolos estimados<br>para ' + area.toFixed(1).replace('.', ',') + ' m² de parede</span></div>' +
+      '<div class="calc-stat"><span class="num" data-count="' + sacos + '">0</span><span class="label">sacos de cimento<br>de 50kg para assentamento</span></div>' +
+      '<p class="calc-note">Estimativa aproximada para fins de referência. As quantidades reais variam conforme a técnica de assentamento, o desperdício e o traço da argamassa — peça o orçamento oficial para valores exatos.</p>';
+    calcResult.querySelectorAll('[data-count]').forEach(function(el){
+      var target = parseInt(el.getAttribute('data-count'), 10);
+      var start = 0;
+      var duration = 700;
+      var startTime = null;
+      function step(ts){
+        if(!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / duration, 1);
+        el.textContent = Math.floor(progress * (target - start) + start);
+        if(progress < 1) requestAnimationFrame(step);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(step);
+    });
+  });
+
+  /* ---------- Testimonials slider ---------- */
+  var slidesWrap = document.getElementById('testiSlides');
+  var slides = slidesWrap.children;
+  var dotsWrap = document.getElementById('testiDots');
+  var current = 0;
+  var autoplayId;
+
+  for(var i = 0; i < slides.length; i++){
+    var dot = document.createElement('button');
+    if(i === 0) dot.className = 'active';
+    dot.setAttribute('aria-label', 'Ir para depoimento ' + (i+1));
+    dot.addEventListener('click', function(idx){ return function(){ goTo(idx); restartAutoplay(); }; }(i));
+    dotsWrap.appendChild(dot);
+  }
+
+  function goTo(index){
+    current = (index + slides.length) % slides.length;
+    slidesWrap.style.transform = 'translateX(-' + (current * 100) + '%)';
+    Array.prototype.forEach.call(dotsWrap.children, function(d, idx){
+      d.classList.toggle('active', idx === current);
+    });
+  }
+  function restartAutoplay(){
+    clearInterval(autoplayId);
+    autoplayId = setInterval(function(){ goTo(current + 1); }, 6000);
+  }
+  document.getElementById('testiPrev').addEventListener('click', function(){ goTo(current - 1); restartAutoplay(); });
+  document.getElementById('testiNext').addEventListener('click', function(){ goTo(current + 1); restartAutoplay(); });
+  document.querySelector('.testi-wrap').addEventListener('mouseenter', function(){ clearInterval(autoplayId); });
+  document.querySelector('.testi-wrap').addEventListener('mouseleave', restartAutoplay);
+  restartAutoplay();
+
+  /* ---------- FAQ accordion ---------- */
+  var faqItems = document.querySelectorAll('#faqList .faq-item');
+  faqItems.forEach(function(item){
+    var q = item.querySelector('.faq-q');
+    q.addEventListener('click', function(){
+      var isActive = item.classList.contains('active');
+      faqItems.forEach(function(other){
+        other.classList.remove('active');
+        other.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+      });
+      if(!isActive){
+        item.classList.add('active');
+        q.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ---------- Lead form (Netlify Forms AJAX) ---------- */
+  var leadForm = document.getElementById('leadForm');
+  var leadSuccess = document.getElementById('leadSuccess');
+  var leadError = document.getElementById('leadError');
+  var leadSubmit = document.getElementById('leadSubmit');
+
+  leadForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    leadSubmit.disabled = true;
+    var originalText = leadSubmit.textContent;
+    leadSubmit.innerHTML = '<span class="spinner"></span> Enviando…';
+
+    var data = new URLSearchParams(new FormData(leadForm)).toString();
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: data
+    }).then(function(response){
+      if(response.ok){
+        leadForm.style.display = 'none';
+        leadSuccess.style.display = 'flex';
+      } else {
+        throw new Error('Request failed');
+      }
+    }).catch(function(){
+      leadError.style.display = 'flex';
+      leadSubmit.disabled = false;
+      leadSubmit.textContent = originalText;
+    });
+  });
+
+  /* ---------- Cookie consent ---------- */
+  var cookieBanner = document.getElementById('cookieBanner');
+  var stored = null;
+  try { stored = localStorage.getItem('cm_cookie_consent'); } catch(err){ stored = null; }
+  if(!stored){
+    setTimeout(function(){ cookieBanner.classList.add('visible'); }, 900);
+  }
+  function setConsent(value){
+    try { localStorage.setItem('cm_cookie_consent', value); } catch(err){}
+    cookieBanner.classList.remove('visible');
+  }
+  document.getElementById('cookieAcceptAll').addEventListener('click', function(){ setConsent('all'); });
+  document.getElementById('cookieEssentialOnly').addEventListener('click', function(){ setConsent('essential'); });
+
+})();
+</script>
+</body>
+</html>
